@@ -34,28 +34,29 @@ class Rules:
     def fastest_route(self, ending_point, starting_point='Z',distance_traveled=0,fastest_routes=0):
         newdict =  self.Distances
         #This is where the route and distance will be calculated
-        tempDistance = distance_traveled
-        tempFastRoute = fastest_routes
-        for x in newdict[starting_point].keys():
-            if x == ending_point:
-                tempDistance = distance_traveled + newdict[starting_point][x]
-                self.already_used.append('->' + x)
+        tempDistance = distance_traveled # 0 , 5
+        tempFastRoute = fastest_routes # 0, 0
+        for x in newdict[starting_point].keys(): # D : 5, ' A B C D'
+            if x == ending_point: # skip, x = A so follow, 
+                tempDistance = distance_traveled + newdict[starting_point][x] # is now 16
+                self.already_used.append('->' + x) # Becomes Z,D,A
                 print(f"Found ending point from strting point {starting_point} and ending at {ending_point} with {tempDistance} miles.")
-                print(f"Path taken was {self.already_used}.")
-                tempFastRoute = distance_traveled
-                self.already_used = ['Z']
+                print(f"Path taken was {self.already_used}.") # Print Z D A
+                tempFastRoute = distance_traveled # Becomes 16
+                self.already_used.pop()
             else:
-                for y in self.already_used:
+                for y in self.already_used: #Empty, so skip
                     if y == x:
                         print(f"Found a path we already took, the path is to {x}. Breaking this loop... ")
                         break
-                if fastest_routes != 0:
+                if fastest_routes != 0: #FT = 0, skip
                     if fastest_routes > newdict[starting_point][x]:
                         print(f"This route is taking too long if we continue to go down path {x}. Breaking this loop...")
                         break 
-                tempDistance = distance_traveled + newdict[starting_point][x]
-                self.already_used.append('->' + x)
-                Rules.fastest_route(self,ending_point,x,tempDistance,tempFastRoute)
+                tempDistance = distance_traveled + newdict[starting_point][x] # tempDistance becomes 5
+                print(f"The current key we are looking at right now is {x}")
+                self.already_used.append('->' + x) # Becomes Z,D
+                Rules.fastest_route(self,ending_point,x,tempDistance,tempFastRoute) # (self, 'A','D', 5, 0)
 
 
 
