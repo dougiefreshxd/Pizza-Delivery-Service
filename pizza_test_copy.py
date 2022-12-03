@@ -20,9 +20,10 @@ class Rules:
         newdict =  self.Distances
         tempDistance = distance_traveled 
         tempFastRoute = fastest_routes 
+        continue_stmnt = False
         for x in newdict[starting_point].keys(): 
             if x == ending_point:
-                print(f"The current value we are looking at right now is {x} from key {starting_point}.") 
+                print(f"The current value we are looking at right now is {x} from key {starting_point} in the if x == ending_point stmnt.") 
                 tempDistance = distance_traveled + newdict[starting_point][x] 
                 self.already_used.append(x) 
                 print(f"Found ending point from strting point {starting_point} and ending at {ending_point} with {tempDistance} miles.")
@@ -37,16 +38,28 @@ class Rules:
                     pass
                 self.already_used.pop()
             else:
-                print(f"The current value we are looking at right now is {x} from key {starting_point}.")
+                print(f"The current value we are looking at right now is {x} from key {starting_point} in the else stmnt.")
                 if len(self.already_used) > 2:
                         if x == self.already_used[-2]:
                             continue 
                 for y in self.already_used:
-                    #print(f"Currently tweaking already used list which is {self.already_used} in the loop at value {y}")
-                    #print(f"The key in the address dictionary that we are jumping from is {self.already_used[-1]} I believe. This is our test.") 
+                    print(f"Currently tweaking already used list which is {self.already_used} in the loop at value {y}")
+                    print(f"The key in the address dictionary that we are jumping from is {self.already_used[-1]} I believe. This is our test.") 
                     if y == x:
                         print(f"Found a path we already took, the path is to {x}. Breaking this loop... ")
-                        break  
+                        tempDict = newdict[starting_point]
+                        tempList = list(tempDict.keys())
+                        print(f"Our tempDict is {tempDict}")
+                        print(f"Our tempList is {tempList}")
+                        #print(f"This is a test, current value printing is {tempList[-1]}")
+                        if y == tempList[-1]:
+                            print(f"Just hit the end of a dictionary of values to key {starting_point} with the last value being {y}, time to pop and go back up to the previous key.")
+                            self.already_used.pop()
+                            continue_stmnt = True
+                            break
+                        continue_stmnt = True
+                if continue_stmnt == True:
+                    continue
                 tempDistance = distance_traveled + newdict[starting_point][x] 
                 if fastest_routes != 0: 
                     if fastest_routes < tempDistance:
@@ -74,4 +87,4 @@ orders = {
 }
 
 
-r1.fastest_route('C')
+r1.fastest_route('B')
