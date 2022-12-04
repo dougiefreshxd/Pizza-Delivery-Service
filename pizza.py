@@ -78,4 +78,4 @@ orders = {
 }
 
 
-r1.fastest_route('D')
+r1.fastest_route('B')
