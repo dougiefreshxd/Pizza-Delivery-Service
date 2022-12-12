@@ -1,38 +1,34 @@
 class Rules:
-    route = []
-    already_used = ['Z']
-    PizzaChoices = {
-        'AllMedium' : {'Medium' : 8},
-        'AllLarge' : {'Large' : 6},
-        '2M5L' : {'Medium' : 2, 'Large' : 5},
-        '3M4L' : {'Medium' : 3, 'Large' : 4},
-        '4M3L' : {'Medium' : 4, 'Large' : 3}
-    }
+    def __init__(self):
+        self.route = []
+        self.already_used = ['Z']
+
     Distances = {
-        'A' : {'B' : 9, 'C' : 3, 'D' : 11},
-        'B' : {'A' : 9, 'C' : 10, 'D' : 4},
-        'C' : {'A' : 3, 'B' : 10, 'D' : 7},
-        'D' : {'A' : 11, 'B' : 4, 'C' : 7, 'Z' : 5},
-        'Z' : {'D' : 5}
+        'A' : {'B' : 2, 'D' : 6, 'E' : 3},
+        'B' : {'A' : 2, 'C' : 2, 'D' : 3, 'E' : 5},
+        'C' : {'B' : 2, 'D' : 2, 'Z' : 7},
+        'D' : {'A' : 6, 'B' : 3, 'C' : 2,'E' : 1, 'Z' : 2},
+        'E' : {'A' : 3, 'D' : 1, 'Z' : 2},
+        'Z' : {'C' : 7, 'D' : 2, 'E' : 2}
     }
 
     def fastest_route(self, ending_point, starting_point='Z',distance_traveled=0,fastest_routes=0):
         newdict =  self.Distances
         tempDistance = distance_traveled
-        tempFastRoute = fastest_routes
+        self.fastest_route = fastest_routes
         continue_stmnt = False
         for x in newdict[starting_point].keys(): 
             if x == ending_point:
                 tempDistance = distance_traveled + newdict[starting_point][x] 
                 self.already_used.append(x) 
-                print(f"Found ending point from strting point {starting_point} and ending at {ending_point} with {tempDistance} miles.")
-                print(f"Path taken was {self.already_used}.")
-                if tempFastRoute == 0:
+                if self.fastest_route == 0:
                     print(f"Current Fastest Route is {tempDistance}.")
-                    tempFastRoute = tempDistance
-                elif tempDistance < tempFastRoute:
-                    print(f"Found a faster route, previous fastest was {tempFastRoute}, new fastest is {tempDistance}.")
-                    tempFastRoute = tempDistance
+                    print(f"The pathing it took was {self.already_used}")
+                    self.fastest_route = tempDistance
+                elif tempDistance < self.fastest_route:
+                    print(f"Found a faster route, previous fastest was {self.fastest_route}, new fastest is {tempDistance}.")
+                    print(f"The pathing it took was {self.already_used}")
+                    self.fastest_route = tempDistance
                 else:
                     pass
                 self.already_used.pop()
@@ -46,36 +42,33 @@ class Rules:
                             continue
                          
                 for y in self.already_used:
+                    tempDict = newdict[starting_point]
                     if y == x:
                         tempDict = newdict[starting_point]
                         tempList = list(tempDict.keys())
-                        if y == tempList[-1]:
-                            self.already_used.pop()
-                            continue_stmnt = True
-                            break
+                        if len(self.already_used) < 3:    
+                            if y == tempList[-1]:
+                                self.already_used.pop()
+                                continue_stmnt = True
+                                break
+
                         continue_stmnt = True
                 if continue_stmnt == True:
                     continue
-                tempDistance = distance_traveled + newdict[starting_point][x] 
+                tempDistance = distance_traveled + newdict[starting_point][x]
                 if fastest_routes != 0: 
                     if fastest_routes < tempDistance:
                         self.already_used.pop()
                         tempDistance = tempDistance - newdict[starting_point][x]
                         break 
-                self.already_used.append(x) # Becomes Z,D
-                Rules.fastest_route(self,ending_point,x,tempDistance,tempFastRoute) 
+                self.already_used.append(x) 
+                Rules.fastest_route(self,ending_point,x,tempDistance,self.fastest_route)
+                if len(self.already_used) > 2:
+                    self.already_used.pop() 
 
-def comparing_lists(current_best, contender):
-    return 0 
+
+
+
 
 r1 = Rules()
-
-orders = {
-    'A' : {'Medium' : 2, 'Large' : 3},
-    'B' : {'Medium' : 0, 'Large' : 4},
-    'C' : {'Medium' : 2, 'Large' : 3},
-    'D' : {'Medium' : 4, 'Large' : 1}
-}
-
-
-r1.fastest_route('B')
+r1.fastest_route('A')
